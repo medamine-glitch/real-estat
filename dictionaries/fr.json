@@ -1,0 +1,88 @@
+{
+  "common": {
+    "home": "Accueil",
+    "properties": "Propriétés",
+    "about": "À Propos",
+    "contact": "Contact",
+    "search": "Rechercher",
+    "language": "Langue"
+  },
+  "home": {
+    "hero": {
+      "title": "Trouvez Votre Maison de Rêve au Maroc",
+      "subtitle": "Découvrez des propriétés exclusives dans les plus beaux endroits",
+      "cta": "Explorer les Propriétés"
+    },
+    "featured": {
+      "title": "Propriétés en Vedette",
+      "viewAll": "Voir Tout"
+    },
+    "locations": {
+      "title": "Emplacements Populaires",
+      "casablanca": "Casablanca",
+      "marrakech": "Marrakech",
+      "tangier": "Tanger",
+      "rabat": "Rabat",
+      "agadir": "Agadir",
+      "fes": "Fès"
+    },
+    "services": {
+      "title": "Nos Services",
+      "buying": "Achat de Propriété",
+      "selling": "Vente de Propriété",
+      "renting": "Location de Propriété",
+      "investing": "Conseil en Investissement"
+    }
+  },
+  "properties": {
+    "title": "Propriétés",
+    "filter": {
+      "title": "Filtrer les Propriétés",
+      "location": "Emplacement",
+      "type": "Type de Propriété",
+      "price": "Fourchette de Prix",
+      "bedrooms": "Chambres",
+      "apply": "Appliquer les Filtres"
+    },
+    "sort": {
+      "title": "Trier Par",
+      "newest": "Plus Récent",
+      "priceAsc": "Prix: Croissant",
+      "priceDesc": "Prix: Décroissant"
+    },
+    "types": {
+      "apartment": "Appartement",
+      "villa": "Villa",
+      "house": "Maison",
+      "land": "Terrain",
+      "commercial": "Commercial"
+    },
+    "details": {
+      "bedrooms": "Chambres",
+      "bathrooms": "Salles de Bain",
+      "area": "Superficie",
+      "price": "Prix",
+      "location": "Emplacement",
+      "description": "Description",
+      "features": "Caractéristiques",
+      "contact": "Contacter l'Agent"
+    }
+  },
+  "contact": {
+    "title": "Contactez-Nous",
+    "form": {
+      "name": "Nom Complet",
+      "email": "Adresse Email",
+      "phone": "Numéro de Téléphone",
+      "message": "Message",
+      "submit": "Envoyer le Message"
+    },
+    "info": {
+      "title": "Informations de Contact",
+      "address": "Adresse",
+      "phone": "Téléphone",
+      "email": "Email",
+      "hours": "Heures d'Ouverture"
+    }
+  }
+}

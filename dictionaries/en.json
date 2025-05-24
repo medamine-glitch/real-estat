@@ -1,0 +1,88 @@
+{
+  "common": {
+    "home": "Home",
+    "properties": "Properties",
+    "about": "About Us",
+    "contact": "Contact",
+    "search": "Search",
+    "language": "Language"
+  },
+  "home": {
+    "hero": {
+      "title": "Find Your Dream Home in Morocco",
+      "subtitle": "Discover exclusive properties in the most beautiful locations",
+      "cta": "Explore Properties"
+    },
+    "featured": {
+      "title": "Featured Properties",
+      "viewAll": "View All"
+    },
+    "locations": {
+      "title": "Popular Locations",
+      "casablanca": "Casablanca",
+      "marrakech": "Marrakech",
+      "tangier": "Tangier",
+      "rabat": "Rabat",
+      "agadir": "Agadir",
+      "fes": "Fes"
+    },
+    "services": {
+      "title": "Our Services",
+      "buying": "Buying Property",
+      "selling": "Selling Property",
+      "renting": "Renting Property",
+      "investing": "Investment Consulting"
+    }
+  },
+  "properties": {
+    "title": "Properties",
+    "filter": {
+      "title": "Filter Properties",
+      "location": "Location",
+      "type": "Property Type",
+      "price": "Price Range",
+      "bedrooms": "Bedrooms",
+      "apply": "Apply Filters"
+    },
+    "sort": {
+      "title": "Sort By",
+      "newest": "Newest",
+      "priceAsc": "Price: Low to High",
+      "priceDesc": "Price: High to Low"
+    },
+    "types": {
+      "apartment": "Apartment",
+      "villa": "Villa",
+      "house": "House",
+      "land": "Land",
+      "commercial": "Commercial"
+    },
+    "details": {
+      "bedrooms": "Bedrooms",
+      "bathrooms": "Bathrooms",
+      "area": "Area",
+      "price": "Price",
+      "location": "Location",
+      "description": "Description",
+      "features": "Features",
+      "contact": "Contact Agent"
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "form": {
+      "name": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "message": "Message",
+      "submit": "Send Message"
+    },
+    "info": {
+      "title": "Contact Information",
+      "address": "Address",
+      "phone": "Phone",
+      "email": "Email",
+      "hours": "Working Hours"
+    }
+  }
+}
