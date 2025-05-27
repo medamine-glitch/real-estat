@@ -1,3 +1,5 @@
+"use client"
+import { useState, useEffect } from "react"
 import { getDictionary, type Locale } from "@/lib/dictionary"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -6,39 +8,76 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { MapPin, Phone, Mail, Clock } from "lucide-react"
 
-export default async function ContactPage({ params: { lang } }: { params: { lang: Locale } }) {
-  const dict = await getDictionary(lang)
+export default function ContactPage({ params: { lang } }: { params: { lang: Locale } }) {
+  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" })
+  const [status, setStatus] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [dict, setDict] = useState<any>(null)
+
+  // Fetch dictionary on mount
+  useEffect(() => {
+    getDictionary(lang).then(setDict)
+  }, [lang])
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setForm({ ...form, [e.target.id]: e.target.value })
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setStatus(null)
+    try {
+      const res = await fetch("http://localhost:8000/api/contact/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      })
+      if (res.ok) {
+        setStatus("Message sent successfully!")
+        setForm({ name: "", email: "", phone: "", message: "" })
+      } else {
+        const data = await res.json()
+        setStatus("Error: " + JSON.stringify(data))
+      }
+    } catch (err) {
+      setStatus("Network error")
+    }
+    setLoading(false)
+  }
+
+  if (!dict) return <div>Loading...</div>
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-3xl font-bold mb-8 text-center">{dict.contact.title}</h1>
-
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <Card>
           <CardContent className="p-6">
             <h2 className="text-2xl font-semibold mb-6">{dict.contact.form.name}</h2>
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="name">{dict.contact.form.name}</Label>
-                  <Input id="name" required />
+                  <Input id="name" required value={form.name} onChange={handleChange} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">{dict.contact.form.email}</Label>
-                  <Input id="email" type="email" required />
+                  <Input id="email" type="email" required value={form.email} onChange={handleChange} />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="phone">{dict.contact.form.phone}</Label>
-                <Input id="phone" type="tel" />
+                <Input id="phone" type="tel" value={form.phone} onChange={handleChange} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="message">{dict.contact.form.message}</Label>
-                <Textarea id="message" rows={6} required />
+                <Textarea id="message" rows={6} required value={form.message} onChange={handleChange} />
               </div>
-              <Button type="submit" className="w-full">
-                {dict.contact.form.submit}
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Sending..." : dict.contact.form.submit}
               </Button>
+              {status && <div className="mt-2 text-center">{status}</div>}
             </form>
           </CardContent>
         </Card>

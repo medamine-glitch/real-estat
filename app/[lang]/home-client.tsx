@@ -22,6 +22,12 @@ function formatPrice(price: number, locale: string) {
   }).format(price)
 }
 
+interface PropertyImage {
+  id: number;
+  image: string;
+  is_main: boolean;
+}
+
 interface Property {
   id: number
   title: string
@@ -29,8 +35,8 @@ interface Property {
   price: number
   bedrooms: number
   bathrooms: number
-  area: number
-  image: string
+  square_meters: number
+  images: PropertyImage[]
   type: string
   description: string
 }
@@ -122,13 +128,18 @@ export default function HomeClient({ dict, lang, featuredProperties, locations }
                 <motion.div whileHover={{ y: -5 }} transition={{ type: "spring", stiffness: 300 }}>
                   <Card className="overflow-hidden bg-card hover:shadow-lg transition-shadow h-full flex flex-col">
                     <Link href={`/${lang}/properties/${property.id}`} className="relative h-64 block">
-                      {/* Use the property's unique image with a default fallback */}
-                      <Image
-                        src={property.image || `/placeholder.svg?height=600&width=800&text=Property_${property.id}`}
-                        alt={property.title}
-                        fill
-                        className="object-cover transition-transform duration-300 hover:scale-105"
-                      />
+                      <div className="relative h-48">
+                        <Image
+                          src={
+                            property.images?.find((img) => img.is_main)?.image ||
+                            property.images?.[0]?.image ||
+                            `/placeholder.svg?height=600&width=800&text=Property_${property.id}`
+                          }
+                          alt={property.title}
+                          fill
+                          className="object-cover rounded-t-lg"
+                        />
+                      </div>
                       {/* Debug overlay to show property ID - remove in production */}
                       {process.env.NODE_ENV === "development" && (
                         <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 text-xs rounded">
@@ -167,7 +178,7 @@ export default function HomeClient({ dict, lang, featuredProperties, locations }
                         </div>
                         <div className="flex items-center">
                           <Maximize className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
-                          <span>{property.area} m²</span>
+                          <span>{property.square_meters} m²</span>
                         </div>
                       </div>
                       <p className="text-muted-foreground text-sm mb-4 line-clamp-2 flex-grow">

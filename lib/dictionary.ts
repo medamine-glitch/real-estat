@@ -1,4 +1,4 @@
-import "server-only"
+
 import type { Locale } from "./types"
 
 const dictionaries = {

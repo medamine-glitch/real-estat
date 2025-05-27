@@ -6,6 +6,10 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Bed, Bath, Maximize, MapPin, Calendar, Check, Phone, Mail, User, MessageSquare } from "lucide-react"
 import { properties } from "@/lib/mock-data"
 import AnimatedElement from "@/components/animated-element"
+import { PropertiesResult } from "../properties-client"
+import { useEffect, useState } from "react"
+import { getProperty } from "../actions"
+import { PropertyImage } from "@/lib/property-filters"
 
 // Format price based on locale
 function formatPrice(price: number, locale: string) {
@@ -19,10 +23,11 @@ function formatPrice(price: number, locale: string) {
 export default async function PropertyPage({
   params: { lang, id },
 }: {
-  params: { lang: Locale; id: string }
+  params: { lang: Locale; id: number }
 }) {
   const dict = await getDictionary(lang)
-  const property = properties.find((p) => p.id === Number.parseInt(id))
+  const property = await getProperty(id);
+  // const property = properties.find((p) => p.id === Number.parseInt(id))
 
   if (!property) {
     return (
@@ -51,26 +56,35 @@ export default async function PropertyPage({
           {/* Property Images */}
           <AnimatedElement animation="fadeIn" className="mb-8">
             <div className="grid grid-cols-2 gap-4">
+              {/* Main Image */}
               <div className="col-span-2">
                 <div className="relative h-[400px] rounded-lg overflow-hidden">
                   <Image
-                    src={property.images[0] || `/placeholder.svg?height=600&width=800&text=Property_${property.id}`}
+                    src={
+                      property.images?.find((img: PropertyImage) => img.is_main)?.image ||
+                      property.images?.[0]?.image ||
+                      `/placeholder.svg?height=600&width=800&text=Property_${property.id}`
+                    }
                     alt={property.title}
                     fill
                     className="object-cover"
                   />
                 </div>
               </div>
-              {property.images.slice(1).map((image, index) => (
-                <div key={index} className="relative h-[200px] rounded-lg overflow-hidden">
-                  <Image
-                    src={image || `/placeholder.svg?height=300&width=400&text=Image_${index + 2}`}
-                    alt={`${property.title} - Image ${index + 2}`}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              ))}
+              {/* Gallery Images */}
+              {property.images
+                ?.filter((img: PropertyImage) => !img.is_main)
+                .slice(0, 4) // Show up to 4 additional images
+                .map((img: PropertyImage, index: number) => (
+                  <div key={img.id} className="relative h-[200px] rounded-lg overflow-hidden">
+                    <Image
+                      src={img.image || `/placeholder.svg?height=300&width=400&text=Image_${index + 2}`}
+                      alt={`${property.title} - Image ${index + 2}`}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                ))}
             </div>
           </AnimatedElement>
 
@@ -94,7 +108,7 @@ export default async function PropertyPage({
               <div className="bg-muted/30 p-4 rounded-lg text-center">
                 <Maximize className="h-6 w-6 mx-auto mb-2" />
                 <p className="text-sm text-muted-foreground">{dict.properties.details.area}</p>
-                <p className="font-semibold">{property.area} m²</p>
+                <p className="font-semibold">{property.square_meters} m²</p>
               </div>
               {property.yearBuilt > 0 && (
                 <div className="bg-muted/30 p-4 rounded-lg text-center">
@@ -116,12 +130,12 @@ export default async function PropertyPage({
           <AnimatedElement animation="fadeInUp" delay={0.3}>
             <h2 className="text-2xl font-semibold mb-4">{dict.properties.details.features}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-2">
-              {property.features.map((feature, index) => (
+              {/* {property.features.map((feature, index) => (
                 <div key={index} className="flex items-center">
                   <Check className="h-5 w-5 text-primary mr-2 rtl:ml-2 rtl:mr-0" />
                   <span>{feature}</span>
                 </div>
-              ))}
+              ))} */}
             </div>
           </AnimatedElement>
         </div>
@@ -145,31 +159,31 @@ export default async function PropertyPage({
           <AnimatedElement animation="fadeInRight" delay={0.2}>
             <Card>
               <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  <div className="relative h-16 w-16 rounded-full overflow-hidden mr-4 rtl:ml-4 rtl:mr-0">
-                    <Image
-                      src={property.agent.image || "/placeholder.svg"}
-                      alt={property.agent.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">{property.agent.name}</h3>
-                    <p className="text-sm text-muted-foreground">Real Estate Agent</p>
-                  </div>
-                </div>
+                 <div className="flex items-center mb-4">
+        <div className="relative h-16 w-16 rounded-full overflow-hidden mr-4 rtl:ml-4 rtl:mr-0">
+          <Image
+            src={property?.agent?.image || "/placeholder.svg"}
+            alt={property?.agent?.name || "Agent"}
+            fill
+            className="object-cover"
+          />
+        </div>
+        <div>
+          <h3 className="font-semibold">{property?.agent?.name || "Unknown Agent"}</h3>
+          <p className="text-sm text-muted-foreground">Real Estate Agent</p>
+        </div>
+      </div>
 
                 <div className="space-y-3 mb-6">
-                  <div className="flex items-center">
-                    <Phone className="h-4 w-4 text-primary mr-2 rtl:ml-2 rtl:mr-0" />
-                    <span>{property.agent.phone}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Mail className="h-4 w-4 text-primary mr-2 rtl:ml-2 rtl:mr-0" />
-                    <span>{property.agent.email}</span>
-                  </div>
-                </div>
+        <div className="flex items-center">
+          <Phone className="h-4 w-4 text-primary mr-2 rtl:ml-2 rtl:mr-0" />
+          <span>{property?.agent?.phone || "N/A"}</span>
+        </div>
+        <div className="flex items-center">
+          <Mail className="h-4 w-4 text-primary mr-2 rtl:ml-2 rtl:mr-0" />
+          <span>{property?.agent?.email || "N/A"}</span>
+        </div>
+      </div>
 
                 <div className="space-y-4">
                   <div className="space-y-2">

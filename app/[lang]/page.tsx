@@ -2,6 +2,7 @@ import { getDictionary } from "@/lib/dictionary"
 import type { Locale } from "@/lib/types"
 import HomeClient from "./home-client"
 import { properties } from "@/lib/mock-data"
+import { getFeaturedProperties } from "./properties/actions"
 
 // Mock data for locations
 const locations = [
@@ -15,9 +16,11 @@ const locations = [
 
 export default async function HomePage({ params }: { params: { lang: Locale } }) {
   const dict = await getDictionary(params.lang)
+  const data = await getFeaturedProperties();
+  console.log(data)
 
   // Get the first 3 properties for featured section
   const featuredProperties = properties.slice(0, 3)
 
-  return <HomeClient dict={dict} lang={params.lang} featuredProperties={featuredProperties} locations={locations} />
+  return <HomeClient dict={dict} lang={params.lang} featuredProperties={data.results.slice(0, 3)} locations={locations} />
 }

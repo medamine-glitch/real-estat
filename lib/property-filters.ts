@@ -6,6 +6,12 @@ export interface FilterCriteria {
   bedrooms: string
 }
 
+export interface PropertyImage {
+  id: number;
+  image: string;
+  is_main: boolean;
+}
+
 export interface Property {
   id: number
   title: string
@@ -14,7 +20,7 @@ export interface Property {
   bedrooms: number
   bathrooms: number
   area: number
-  image: string
+  images: PropertyImage[]
   type: string
   description: string
 }
